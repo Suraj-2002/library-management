@@ -5,9 +5,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.lang.NonNull;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -22,45 +24,51 @@ public class JWTFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                               HttpServletResponse response,
-                               FilterChain filterChain)
-        throws ServletException, IOException {
+    protected void doFilterInternal(
+        @NonNull HttpServletRequest request,
+        @NonNull HttpServletResponse response,
+        @NonNull FilterChain filterChain
+    ) throws ServletException, IOException {
 
-    System.out.println("JWT FILTER HIT"); // debug
+        System.out.println("JWT FILTER HIT");
 
-    String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization");
 
-    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
 
-        String token = authHeader.substring(7);
+            String token = authHeader.substring(7);
 
-        if (jwtUtil.validateToken(token)) {
+            if (jwtUtil.validateToken(token)) {
 
-    String email = jwtUtil.extractEmail(token);
+                String email = jwtUtil.extractEmail(token);
+                String role = jwtUtil.extractRole(token);
+                String name = jwtUtil.extractName(token); // ✅ extract name
 
-    if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                request.setAttribute("email", email);
+                request.setAttribute("role", role);
+                request.setAttribute("name", name); // ✅ set name attribute
 
-        UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(
-                        email,
-                        null,
-                        Collections.emptyList()
-                );
+                if (SecurityContextHolder.getContext().getAuthentication() == null) {
 
-        authToken.setDetails(
-                new org.springframework.security.web.authentication.WebAuthenticationDetailsSource()
-                        .buildDetails(request)
-        );
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    email,
+                                    null,
+                                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
+                            );
 
-        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    authToken.setDetails(
+                            new org.springframework.security.web.authentication.WebAuthenticationDetailsSource()
+                                    .buildDetails(request)
+                    );
 
-        System.out.println("AUTH SET SUCCESS"); // debug
-    }
-        } else {
-            System.out.println("INVALID TOKEN"); // debug
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    System.out.println("AUTH SET SUCCESS");
+                }
+            } else {
+                System.out.println("INVALID TOKEN");
+            }
         }
-    }
 
         filterChain.doFilter(request, response);
     }
