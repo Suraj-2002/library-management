@@ -1,24 +1,24 @@
-# 📚 Library Management System (Spring Boot + MongoDB + Docker)
+# Library Management System (Spring Boot + MongoDB + Docker)
 
 A complete backend system for managing a library with authentication, role-based access, book borrowing, return policies, scheduler, and observability.
 
 ---
 
-## 🚀 Features
+##  Features
 
-- 🔐 JWT Authentication (Signup/Login)
-- 👤 Role-based access (ADMIN / USER)
-- 📖 Book Management
-- 🔄 Borrow & Return System
-- ⏰ Expiry-based auto return
-- 🌙 10 PM Library Return Policy
-- 📊 Actuator Metrics & Health Monitoring
-- 🐳 Dockerized MongoDB
-- ⚙️ Clean layered architecture
+-  JWT Authentication (Signup/Login)
+-  Role-based access (ADMIN / USER)
+-  Book Management
+-  Borrow & Return System
+-  Expiry-based auto return
+-  10 PM Library Return Policy
+-  Actuator Metrics & Health Monitoring
+-  Dockerized MongoDB
+-  Clean layered architecture
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ![Architecture Diagram](./architecture.png)
 
@@ -34,7 +34,7 @@ MongoDB (Docker Container)
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 src/main/java/com/library
@@ -53,7 +53,7 @@ src/main/java/com/library
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - Java 21
 - Spring Boot
@@ -66,7 +66,7 @@ src/main/java/com/library
 
 ---
 
-## ⚙️ Setup & Run
+## Setup & Run
 
 ### 1. Start MongoDB
 
@@ -82,7 +82,7 @@ docker-compose up -d
 
 ---
 
-## 🔐 Authentication APIs
+## Authentication APIs
 
 ### Signup
 
@@ -109,11 +109,11 @@ docker-compose up -d
 }
 ```
 
-👉 Copy JWT token from response
+ Copy JWT token from response
 
 ---
 
-## 📚 Book APIs
+## Book APIs
 
 ### Add Book (ADMIN)
 
@@ -158,7 +158,7 @@ Authorization: Bearer <TOKEN>
 
 ---
 
-## ⏰ Scheduler
+## Scheduler
 
 - Auto returns expired books
 - Enforces 10 PM return policy
@@ -166,7 +166,7 @@ Authorization: Bearer <TOKEN>
 
 ---
 
-## 📊 Monitoring
+## Monitoring
 
 ### Health
 
@@ -182,7 +182,7 @@ GET /actuator/metrics
 
 ---
 
-## 🐳 Docker
+## Docker
 
 ```yaml
 version: '3.8'
@@ -198,7 +198,7 @@ services:
 
 ---
 
-## 🧪 Testing
+## Testing
 
 Use:
 - Thunder Client (VS Code)
@@ -206,7 +206,7 @@ Use:
 
 ---
 
-## 📌 Notes
+## Notes
 
 - JWT required for protected APIs
 - ADMIN → add books
