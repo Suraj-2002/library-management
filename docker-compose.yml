@@ -1,9 +1,19 @@
-version: '3.8'
-
 services:
+
   mongodb:
     image: mongo:6
     container_name: library-mongo
     ports:
       - "27017:27017"
+    restart: always
+
+  app:
+    build: .
+    container_name: library-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/library
     restart: always

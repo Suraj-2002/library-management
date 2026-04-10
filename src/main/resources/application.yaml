@@ -4,13 +4,10 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://localhost:27017/library_db
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/library}
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
-  endpoint:
-    health:
-      show-details: always
+        include: health,info,metrics,prometheus
