@@ -25,9 +25,10 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll() // ✅ login/signup open
-                .anyRequest().authenticated()            // 🔐 everything else secured
-            )
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/actuator/**").permitAll() // ✅ add this
+                .anyRequest().authenticated()
+)
             .formLogin(form -> form.disable())
             .httpBasic(basic -> basic.disable())
             // ✅ ADD JWT FILTER
