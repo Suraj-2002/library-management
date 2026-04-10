@@ -1,20 +1,20 @@
 # Library Management System (Spring Boot + MongoDB + Docker)
 
-A complete backend system for managing a library with authentication, role-based access, book borrowing, return policies, scheduler, and observability.
+A backend system for managing a library with authentication, role-based access, book borrowing, return policies, scheduler, and observability.
 
 ---
 
-##  Features
+## Features
 
--  JWT Authentication (Signup/Login)
--  Role-based access (ADMIN / USER)
--  Book Management
--  Borrow & Return System
--  Expiry-based auto return
--  10 PM Library Return Policy
--  Actuator Metrics & Health Monitoring
--  Dockerized MongoDB
--  Clean layered architecture
+- JWT Authentication (Signup/Login)
+- Role-based access (ADMIN / USER)
+- Book Management
+- Borrow & Return System
+- Expiry-based auto return
+- 10 PM Library Return Policy
+- Actuator Metrics & Health Monitoring
+- Dockerized MongoDB
+- Clean layered architecture
 
 ---
 
@@ -22,19 +22,34 @@ A complete backend system for managing a library with authentication, role-based
 
 ![Architecture Diagram](./architecture.png)
 
-Client (Thunder Client / Postman)  
-⬇  
-Spring Boot Application (REST APIs)  
-⬇  
-- Security Layer (JWT Filter)  
-- Service Layer (Business Logic)  
-- Scheduler (Auto return at 10 PM)  
-⬇  
+```
+Client (Thunder Client / Postman)
+⬇
+Spring Boot Application (REST APIs)
+⬇
+- Security Layer (JWT Filter)
+- Service Layer (Business Logic)
+- Scheduler (Auto return at 10 PM)
+⬇
 MongoDB (Docker Container)
+```
 
 ---
 
-##  Project Structure
+## Tech Stack
+
+- Java 21
+- Spring Boot
+- Spring Security
+- MongoDB
+- Docker
+- JWT
+- Gradle
+- Spring Actuator
+
+---
+
+## Project Structure
 
 ```
 src/main/java/com/library
@@ -53,28 +68,18 @@ src/main/java/com/library
 
 ---
 
-##  Tech Stack
+## Setup & Run
 
-- Java 21
-- Spring Boot
-- Spring Security
-- MongoDB
-- Docker
-- JWT
-- Gradle
-- Spring Actuator
+### Run with Docker
+
+```bash
+./gradlew clean bootJar
+docker-compose up --build
+```
 
 ---
 
-## Setup & Run
-
-### 1. Start MongoDB
-
-```bash
-docker-compose up -d
-```
-
-### 2. Run Application
+### Run Locally
 
 ```bash
 ./gradlew bootRun
@@ -82,79 +87,25 @@ docker-compose up -d
 
 ---
 
-## Authentication APIs
+## API Endpoints
 
-### Signup
+### Auth
+- POST `/auth/signup`
+- POST `/auth/login`
 
-**POST** `/auth/signup`
-
-```json
-{
-  "name": "Rahul",
-  "email": "rahul@gmail.com",
-  "password": "rahul123"
-}
-```
-
----
-
-### Login
-
-**POST** `/auth/login`
-
-```json
-{
-  "email": "rahul@gmail.com",
-  "password": "rahul123"
-}
-```
-
- Copy JWT token from response
+### Books
+- GET `/books`
+- POST `/books` — ADMIN only
+- POST `/books/borrow/{id}` — USER only
+- POST `/books/return/{id}` — USER only
+- GET `/books/my` — USER only
 
 ---
 
-## Book APIs
+## Observability
 
-### Add Book (ADMIN)
-
-**POST** `/books`
-
-Header:
-```
-Authorization: Bearer <TOKEN>
-```
-
-```json
-{
-  "title": "Spring Boot Guide",
-  "author": "John",
-  "libraryOnly": false
-}
-```
-
----
-
-### Get All Books
-
-**GET** `/books`
-
----
-
-### Borrow Book
-
-**POST** `/books/borrow/{bookId}`
-
----
-
-### Return Book
-
-**POST** `/books/return/{bookId}`
-
----
-
-### My Books
-
-**GET** `/books/my`
+- GET `/actuator/health`
+- GET `/actuator/metrics`
 
 ---
 
@@ -166,53 +117,8 @@ Authorization: Bearer <TOKEN>
 
 ---
 
-## Monitoring
-
-### Health
-
-```
-GET /actuator/health
-```
-
-### Metrics
-
-```
-GET /actuator/metrics
-```
-
----
-
-## Docker
-
-```yaml
-version: '3.8'
-
-services:
-  mongodb:
-    image: mongo:6
-    container_name: library-mongo
-    ports:
-      - "27017:27017"
-    restart: always
-```
-
----
-
 ## Testing
 
 Use:
 - Thunder Client (VS Code)
 - Postman
-
----
-
-## Notes
-
-- JWT required for protected APIs
-- ADMIN → add books
-- USER → borrow/return
-- Expired books auto-returned
-- Old tokens won't have updated data
-
----
-
